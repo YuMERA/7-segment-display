@@ -68,9 +68,9 @@ void numMenu(){
    * prelazim na drugu. Posle zadnje cifre prestaje blinkanje i setovani broj    *
    * se upisuje u eeprom memoriju pocevsi od adrese 0. To je iz razloga ako      *
    * dodje do nasilnog iskljucenja displeja kako bi se pri ponvnom ukljucejne    *
-   * prikazao zasnje podeseni broj                                               *
-   * Interrupt funkcija za butoon1                                               *
+   * prikazao zadnje podeseni broj                                               *
    *-----------------------------------------------------------------------------*/
+  //Interrupt funkcija za butoon1   
   static unsigned long last_interrupt_time = 0;
   unsigned long interrupt_time = millis();
     // Ako interrupts dolazi brze od 250ms ignorisemo pritisak na button (DEBOUNCE)
