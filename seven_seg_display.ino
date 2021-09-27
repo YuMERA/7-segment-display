@@ -12,7 +12,7 @@
   #define button2     3   // button 2 increment broja ++
   #define DIGIT_ITEMS 5   // broj cifara
 
-  /*Segment Decoding Table by YuMERA for shift LSBFIRST za MBFIRST obrnuti redlosed bitova
+  /*Segment Decoding Table by me[R]a for shift LSBFIRST za MBFIRST obrnuti redlosed bitova
    *------------------------------------------------------------------------------------------------*
    * Char      A B C D E F G   DP  Hex Value     Binary      Decimal             Patern             *
    *------------------------------------------------------------------------------------------------*            
