@@ -5,12 +5,12 @@
    * Arduino NANO                             *
    *------------------------------------------*/
   #include <EEPROM.h>
-  #define latchPin  6   // rck
-  #define clockPin  7   // sck
-  #define dataPin   5   // ser in
-  #define button1   2   // button 1 menu settings.
-  #define button2   3   // button 2 increment broja ++
-  #define DIGIT_ITEMS 5 // broj cifara
+  #define latchPin    6   // rck
+  #define clockPin    7   // sck
+  #define dataPin     5   // ser in
+  #define button1     2   // button 1 menu settings.
+  #define button2     3   // button 2 increment broja ++
+  #define DIGIT_ITEMS 5   // broj cifara
 
   /*Segment Decoding Table by YuMERA for shift LSBFIRST za MBFIRST obrnuti redlosed bitova
    *------------------------------------------------------------------------------------------------*
@@ -29,7 +29,7 @@
    * space     0 0 0 0 0 0 0   0     00        B00000000       000                 D                *
    *------------------------------------------------------------------------------------------------*/            
 
-  byte SegDigit[] = {0xFC,0x60,0xDA,0xF2,0x66,0xB6,0xBE,0xE0,0xFE,0xF6,0x00};                       
+  byte SegDigit[] = {0xFC, 0x60, 0xDA, 0xF2, 0x66, 0xB6, 0xBE, 0xE0, 0xFE, 0xF6, 0x00};                       
   byte digitBuffer[DIGIT_ITEMS] = {0};
   byte dot;                               // decimalna tacka
   volatile int count_digit = DIGIT_ITEMS; // redosled cifara za podesavanje brojeva
@@ -47,9 +47,9 @@ void setup () {
   dot=EEPROM.read(0x0F);// pozicija decimalne tacke memorisana na eeprom adresi 15 dec
   pinMode(latchPin, OUTPUT);
   pinMode(clockPin, OUTPUT);
-  pinMode(dataPin,  OUTPUT);   
-  pinMode(button1,  INPUT_PULLUP);
-  pinMode(button2,  INPUT_PULLUP);
+  pinMode(dataPin , OUTPUT);   
+  pinMode(button1 , INPUT_PULLUP);
+  pinMode(button2 , INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(button1), numMenu,   RISING);
   attachInterrupt(digitalPinToInterrupt(button2), increment, RISING);
 }  
@@ -120,22 +120,22 @@ void updateDisplay(){
     byte showDigit = SegDigit[digitBuffer[i]];
     
     if(state == HIGH && count_digit == -1 && loop_time > 500){
-      showDigit = SegDigit[digitBuffer[i]]&0xFE;   // B11111110 resetujem decimalnu tacku
+      showDigit = SegDigit[digitBuffer[i]] & 0xFE;              // B11111110 resetujem decimalnu tacku
     }else{
-      showDigit = SegDigit[digitBuffer[i]]|0x01;   // B00000001 setujem decimalnu tacku
+      showDigit = SegDigit[digitBuffer[i]] | 0x01;              // B00000001 setujem decimalnu tacku
       
-      if(dot == i) showDigit = SegDigit[digitBuffer[i]]|0x01; // B00000001 setujem decimalnu tacku
-      else showDigit = SegDigit[digitBuffer[i]]&0xFE; // B11111110 resetujem decimalnu tacku
+      if(dot == i) showDigit = SegDigit[digitBuffer[i]] | 0x01; // B00000001 setujem decimalnu tacku
+      else showDigit = SegDigit[digitBuffer[i]] & 0xFE;         // B11111110 resetujem decimalnu tacku
     }
   /*-----------------------------------------------------------------------------*
    * blinkam sa cifrom koju menjam  (time>500 about 500ms)                       *
    *-----------------------------------------------------------------------------*/
-    if (state == HIGH && count_digit == i && loop_time > 500) shiftOut(dataPin,clockPin, LSBFIRST,0x00);
-    else shiftOut(dataPin,clockPin, LSBFIRST,showDigit);
+    if (state == HIGH && count_digit == i && loop_time > 500) shiftOut(dataPin, clockPin, LSBFIRST, 0x00);
+    else shiftOut(dataPin, clockPin, LSBFIRST, showDigit);
     
   /*-----------------------------------------------------------------------------*/
   }
-  digitalWrite(latchPin,HIGH);
+  digitalWrite(latchPin, HIGH);
   
   loop_time++; 
   if (loop_time/2 > 500) 
@@ -150,19 +150,19 @@ void endEdit(){
     digitalWrite(latchPin, LOW);
     delay(200);
     for(int i = DIGIT_ITEMS; i > -1; i--){
-      shiftOut(dataPin,clockPin, LSBFIRST,0x00);
+      shiftOut(dataPin, clockPin, LSBFIRST, 0x00);
     }
-    digitalWrite(latchPin,HIGH);  
+    digitalWrite(latchPin, HIGH);  
     digitalWrite(latchPin, LOW);
     delay(200);
     for(int i = DIGIT_ITEMS; i > -1; i--){
       if(dot==i){
-        shiftOut(dataPin,clockPin, LSBFIRST,SegDigit[digitBuffer[i]]|0x01); // B00000001 setujem decimalnu tacku);
+        shiftOut(dataPin, clockPin, LSBFIRST, SegDigit[digitBuffer[i]] | 0x01); // B00000001 setujem decimalnu tacku);
       }else{
-        shiftOut(dataPin,clockPin, LSBFIRST,SegDigit[digitBuffer[i]]&0xFE); // B11111110 resetujem decimalnu tacku
+        shiftOut(dataPin, clockPin, LSBFIRST, SegDigit[digitBuffer[i]] & 0xFE); // B11111110 resetujem decimalnu tacku
       }
     }
-    digitalWrite(latchPin,HIGH);
+    digitalWrite(latchPin, HIGH);
   }
   edit = LOW;
 }
