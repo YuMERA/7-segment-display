@@ -10,7 +10,7 @@
   #define dataPin     5   // ser in
   #define button1     2   // button 1 menu settings.
   #define button2     3   // button 2 increment broja ++
-  #define DIGIT_ITEMS 5   // broj cifara
+  #define DIGIT_ITEMS 5   // broj cifara na displeju
 
   /*Segment Decoding Table by me[R]a for shift LSBFIRST za MBFIRST obrnuti redlosed bitova
    *------------------------------------------------------------------------------------------------*
@@ -40,11 +40,10 @@
 
 void setup () {
   Serial.begin(115200);
-  // citam brojeve cifara iz eeproma pocevsi od address 0
-  for(int i = DIGIT_ITEMS; i > -1; i--){
+  for(int i = DIGIT_ITEMS; i > -1; i--){  // citam brojeve cifara iz eeproma pocevsi od address 0
     digitBuffer[i] = EEPROM.read(i);
   }
-  dot=EEPROM.read(0x0F);// pozicija decimalne tacke memorisana na eeprom adresi 15 dec
+  dot=EEPROM.read(0x0F);  // pozicija decimalne tacke memorisana na eeprom adresi 15 dec
   pinMode(latchPin, OUTPUT);
   pinMode(clockPin, OUTPUT);
   pinMode(dataPin , OUTPUT);   
@@ -59,7 +58,6 @@ void loop () {
     endEdit();      
   else            // Prikaz trenutnog stanja cifara 
     updateDisplay();
-  
 }
 
 void numMenu(){
@@ -98,7 +96,7 @@ void increment(){
    *-----------------------------------------------------------------------------*/
   static unsigned long last_interrupt_time = 0;
   unsigned long interrupt_time = millis();
-  // Ako interrupts dolazi brze od 150ms ignorisemo pritisak na button (DEBOUNCE)
+  // Ako interrupts dolazi brze od 250ms ignorisemo pritisak na button (DEBOUNCE)
     if (interrupt_time - last_interrupt_time > 250) {
       if (state == HIGH) {
         if (count_digit > -1)
